@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  FlatList
 } from "react-native";
 import { connect } from "react-redux";
 import Button from "react-native-button";
@@ -104,17 +104,6 @@ class MainScreen extends Component {
                 defaultValue={`${this.props.tvResults.number_of_seasons}`}
               />
             </View>
-            {/*<TouchableOpacity style={styles.btnStyle}>
-          <Text>TEST BTN</Text>
-        </TouchableOpacity>
-        <ScrollView horizontal>
-          {this.state.tvResultsFetched && (
-            <Text> {this.props.tvResults.number_of_seasons}</Text>
-          )}
-          <Text>Item 2</Text>
-          <Text>Item 3</Text>
-        </ScrollView> */}
-
             <Svg style={styles.goBtn} height="100" width="100">
               <Svg.Path d="M50,18c-17.6,0-32,14.4-32,32s14.4,32,32,32s32-14.4,32-32S67.6,18,50,18z M50,76c-14.3,0-26-11.7-26-26s11.7-26,26-26   s26,11.7,26,26S64.3,76,50,76z" />
               <Svg.Path d="M46.2,35.4c-1.1-1.2-3-1.2-4.2-0.1c-1.2,1.1-1.2,3-0.1,4.2l10,10.4l-10,10.4c-1.1,1.2-1.1,3.1,0.1,4.2   c0.6,0.6,1.3,0.8,2.1,0.8c0.8,0,1.6-0.3,2.2-0.9l12-12.5c1.1-1.2,1.1-3,0-4.2L46.2,35.4z" />
@@ -136,8 +125,23 @@ class MainScreen extends Component {
             </Button>
           </View>
           <View>
-            <Text> outer </Text>
+            <Text> {Date} </Text>
           </View>
+        </View>
+        <View style={{ /*backgroundColor: "red",*/ alignItems: "center" }}>
+          <FlatList
+            horizontal
+            data={this.props.selectedSeasons}
+            renderItem={({ item }) => (
+              <Image
+                source={{
+                  uri: item.posterUrl,
+                  cache: "only-if-cached"
+                }}
+                style={{ width: 150, height: 250, margin: 5 }}
+              />
+            )}
+          />
         </View>
       </Image>
     );
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
 //      results: state.results.results
 // results in left => the property we are goin to set
 //      state.result => result piece of state
-// In out comineReducer call we have defined that this pice of state, ie state.resluts is
+// In out combineReducer call we have defined that this pice of state, ie state.resluts is
 //set by movie_reducer
 //      results: movies
 // In movie_reducer we have
@@ -222,7 +226,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     results: state.results.results,
-    tvResults: state.results.tvResults
+    tvResults: state.results.tvResults,
+    selectedSeasons: state.results.selectedSeasons
   };
 };
 
