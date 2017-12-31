@@ -5,7 +5,7 @@ import _ from "lodash";
 import {
   StyleSheet,
   View,
-  Image,
+  ImageBackground,
   TextInput,
   Text,
   TouchableOpacity,
@@ -58,7 +58,7 @@ class MainScreen extends Component {
     //  console.log("PROPZ==>"+JSON.stringify(this.props));
     //debugger;
     return (
-      <Image source={bgImage} style={styles.imgContainer}>
+      <ImageBackground  source={bgImage} style={styles.imgContainer}>
         <View>
           <View style={styles.firstRow}>
             <Autocomplete
@@ -143,7 +143,7 @@ class MainScreen extends Component {
             )}
           />
         </View>
-      </Image>
+      </ImageBackground>
     );
   }
 }
