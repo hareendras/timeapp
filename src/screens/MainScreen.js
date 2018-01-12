@@ -36,7 +36,7 @@ class MainScreen extends Component {
     // this is possible because we imported action creaters  as=>
     // import * as actions from '../actions'; in above
     //and we have passed 'actions' to connect function below as
-    // export default connect(null, actions)(MainScreen);
+    // export default connect(mapStateToProps, actions)(MainScreen);
     if (text !== "") {
       //   console.log('PROPZ==>'+JSON.stringify(this.props));
       this.props.fetchMovies(text);
@@ -58,7 +58,7 @@ class MainScreen extends Component {
     //  console.log("PROPZ==>"+JSON.stringify(this.props));
     //debugger;
     return (
-      <ImageBackground  source={bgImage} style={styles.imgContainer}>
+      <ImageBackground source={bgImage} style={styles.imgContainer}>
         <View>
           <View style={styles.firstRow}>
             <Autocomplete
@@ -71,9 +71,9 @@ class MainScreen extends Component {
               hideResults={hideResults}
               data={
                 this.props.results &&
-                this.props.results.length > 1 &&
-                this.props.results &&
-                comp(query, this.props.results[0].original_name)
+                  this.props.results.length > 1 &&
+                  this.props.results &&
+                  comp(query, this.props.results[0].original_name)
                   ? []
                   : this.props.results
               }
@@ -116,20 +116,18 @@ class MainScreen extends Component {
                 height: 70,
                 overflow: "hidden",
                 borderRadius: 100,
-                backgroundColor: "transparent"
+                /*backgroundColor: "transparent" */
               }}
               disabledContainerStyle={{ backgroundColor: "transparent" }}
               style={{ fontSize: 20, color: "transparent" }}
             >
               xxxxx
             </Button>
-          </View>
-          <View>
-            <Text> {Date} </Text>
-          </View>
+          </View>       
         </View>
-        <View style={{ /*backgroundColor: "red",*/ alignItems: "center" }}>
-          <FlatList
+        <View style={{ backgroundColor: "red", alignItems: "center" }}>
+
+            {/*   <FlatList
             horizontal
             data={this.props.selectedSeasons}
             renderItem={({ item }) => (
@@ -141,7 +139,8 @@ class MainScreen extends Component {
                 style={{ width: 150, height: 250, margin: 5 }}
               />
             )}
-          />
+          /> */}
+         
         </View>
       </ImageBackground>
     );
