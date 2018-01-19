@@ -7,5 +7,5 @@ export default combineReducers({
   // ie. results piece of state ie: state.results is set by movies reducer 
   // the state can be acceesd in mapStateToProps like state.results.<whtv set by movies reducer>
 
-  results: movies  
+  tvShows: movies  
 });

@@ -223,10 +223,11 @@ const styles = StyleSheet.create({
 //array which are handled by movie_reducer
 
 const mapStateToProps = state => {
+  console.log("SATE++>"+JSON.stringify(state));
   return {
-    results: state.results.results,
-    tvResults: state.results.tvResults,
-    selectedSeasons: state.results.selectedSeasons
+    results: state.tvShows.tvShowList,
+    tvResults: state.tvShows.tvShowDetails,
+    selectedSeasons: state.tvShows.selectedSeasons
   };
 };
 

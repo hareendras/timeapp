@@ -27,15 +27,15 @@ export const fetchMovies = title => async dispatch => {
     const url = buildMovieUrl(title);
     let response = await fetch(url);
     let responseJson = await response.json();
-    let result = responseJson.results.reduce((out, item) => {
+    let tvShowList = responseJson.results.reduce((out, item) => {
       out.push({
         id: item.id,
         original_name: item.original_name
       });
       return out;
     }, []);
-    console.log(result);
-    dispatch({ type: FETCH_MOVIES, payload: result });
+    console.log(tvShowList);
+    dispatch({ type: FETCH_MOVIES, payload: tvShowList });
   } catch (e) {
     console.error(e);
   }
