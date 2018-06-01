@@ -28,7 +28,8 @@ class MainScreen extends Component {
       query: "",
       hideResults: false,
       tvResultsFetched: false,
-      seasonNo: ""
+      currentlySelectedTvid: "",
+      currentSeasonNo: 0
     };
   }
 
@@ -42,15 +43,21 @@ class MainScreen extends Component {
       this.props.fetchMovies(text);
       //   console.log('PROPZ==>'+JSON.stringify(this.props));
       this.setState({ query: text, hideResults: false });
-      // debugger;
     }
   }
 
   onPressResult(id) {
-    this.props.fetchTVDetails(id);
-    this.setState({ tvResultsFetched: true });
+    this.props.fetchTVDetails(id, 0);
+    this.setState({ tvResultsFetched: true, currentlySelectedTvid: id, currentSeasonNo:this.props.tvResults.number_of_seasons });
   }
 
+  _handlePressGoBtn(currentlySelectedTvid, currentSeasonNo = 0) {
+    this.props.fetchTVDetails(currentlySelectedTvid, currentSeasonNo);
+  }
+  _handleChangeSeason(text = 0) {
+    console.log("Componet State ", JSON.stringify(this.state));
+    this.setState({ currentSeasonNo: text });
+  }
   render() {
     const { query, hideResults } = this.state;
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
@@ -71,9 +78,9 @@ class MainScreen extends Component {
               hideResults={hideResults}
               data={
                 this.props.results &&
-                  this.props.results.length > 1 &&
-                  this.props.results &&
-                  comp(query, this.props.results[0].original_name)
+                this.props.results.length > 1 &&
+                this.props.results &&
+                comp(query, this.props.results[0].original_name)
                   ? []
                   : this.props.results
               }
@@ -102,6 +109,7 @@ class MainScreen extends Component {
                 style={styles.textInpSeason}
                 placeholder="Seasons #"
                 defaultValue={`${this.props.tvResults.number_of_seasons}`}
+                onChangeText={text => this._handleChangeSeason(text)}
               />
             </View>
             <Svg style={styles.goBtn} height="100" width="100">
@@ -115,19 +123,25 @@ class MainScreen extends Component {
                 padding: 10,
                 height: 70,
                 overflow: "hidden",
-                borderRadius: 100,
+                borderRadius: 100
                 /*backgroundColor: "transparent" */
               }}
               disabledContainerStyle={{ backgroundColor: "transparent" }}
               style={{ fontSize: 20, color: "transparent" }}
+              onPress={() =>{
+                console.log("COMP STATE =>",this.state);
+                this._handlePressGoBtn(
+                  this.state.currentlySelectedTvid,
+                  this.state.currentSeasonNo
+                )}
+              }
             >
-              xxxxx
+              > xxxxx
             </Button>
-          </View>       
+          </View>
         </View>
         <View style={{ backgroundColor: "red", alignItems: "center" }}>
-
-            {/*   <FlatList
+          {/*   <FlatList
             horizontal
             data={this.props.selectedSeasons}
             renderItem={({ item }) => (
@@ -140,7 +154,6 @@ class MainScreen extends Component {
               />
             )}
           /> */}
-         
         </View>
       </ImageBackground>
     );
@@ -204,29 +217,25 @@ const styles = StyleSheet.create({
 });
 
 //mapping of component properties to state ====>>>>>>
-//      results: state.results.results
+//      results: state.tvShows.tvShowList,
 // results in left => the property we are goin to set
-//      state.result => result piece of state
-// In out combineReducer call we have defined that this pice of state, ie state.resluts is
+//      state.tvShows.tvShowList => tvShows piece of state
+// In out COMBINEREDUCER call we have defined that tvShows piece of state, ie state.tvShows is
 //set by movie_reducer
-//      results: movies
-// In movie_reducer we have
-//const INITIAL_STATE = {
-//  results: [],
-//  tvResults: []
+//       tvShows: movies
+
+// in movie reducer
+// const INITIAL_STATE = {
+// tvShowList: [],
+//  tvShowDetails: { number_of_seasons: "" },
+//  selectedSeasons: []
 //};
-//This implies that state.results will have two arrays namely results and tvResults
-//and those two are handled by movie_reducer
-//So when we access state.results.results in mapStateToProps below,
-// we are refering to results piece of state,
-//and under results piece of state we have results array and tvResults
-//array which are handled by movie_reducer
 
 const mapStateToProps = state => {
-  console.log("SATE++>"+JSON.stringify(state));
+ // console.log("SATE++>" + JSON.stringify(state));
   return {
-    results: state.tvShows.tvShowList,
-    tvResults: state.tvShows.tvShowDetails,
+    results: state.tvShows.tvShowList, // results of search auto complete
+    tvResults: state.tvShows.tvShowDetails, // detail results of selected tvShow
     selectedSeasons: state.tvShows.selectedSeasons
   };
 };

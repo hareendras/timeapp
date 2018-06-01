@@ -1,5 +1,5 @@
 import qs from "qs";
-import { FETCH_MOVIES, FETCH_TV_DETAIL } from "./types";
+import { FETCH_MOVIES, FETCH_TV_DETAIL, SET_TOTAL_TIME_SPENT } from "./types";
 import { MOVIE_API_KEY } from "../../keys";
 
 //const MOVIE_ROOT_URL = 'http://api.themoviedb.org/3/search/tv?';
@@ -12,7 +12,7 @@ const MOVIE_QUERY_PARAMS = {
 
 const buildMovieUrl = title => {
   const query = qs.stringify({ ...MOVIE_QUERY_PARAMS, query: title });
-  console.log(query);
+  //console.log(query);
   return `${MOVIE_ROOT_URL}${SEARCH_TV}${query}`;
 };
 
@@ -34,28 +34,32 @@ export const fetchMovies = title => async dispatch => {
       });
       return out;
     }, []);
-    console.log(tvShowList);
+  //  console.log(tvShowList);
     dispatch({ type: FETCH_MOVIES, payload: tvShowList });
   } catch (e) {
-    console.error(e);
+  //  console.error(e);
   }
 };
 
-export const fetchTVDetails = tvId => async dispatch => {
+export const fetchTVDetails = (tvId, currentSeasonNo) => async dispatch => {
   try {
     const url = buildTVDetailUrl(tvId);
-    console.log("Hi from fetchTVDetails");
-    console.log(url);
+  //  console.log("Hi from fetchTVDetails");
+  //  console.log(url);
     let response = await fetch(url);
     let responseJson = await response.json();
     let obj = {
       number_of_seasons: responseJson.number_of_seasons,
       number_of_episodes: responseJson.number_of_episodes,
       poster_path: responseJson.poster_path,
-      episode_runtime: responseJson.episode_run_time
+      episode_runtime: responseJson.episode_run_time,
+      seasons: responseJson.seasons,
+      currentSeasonNo: currentSeasonNo ? 0 : currentSeasonNo
     };
-    console.log("RESPPONSE IN fetchTVDetails" + obj.toString());
+  //  console.log("RESPPONSE IN fetchTVDetails" + obj.toString());
     dispatch({ type: FETCH_TV_DETAIL, payload: obj });
+    dispatch({ type: SET_TOTAL_TIME_SPENT, payload: obj });
+  //  dispatch({ type: SET_POSTER_PATH, payload: obj });
   } catch (e) {
     console.error(e);
   }
